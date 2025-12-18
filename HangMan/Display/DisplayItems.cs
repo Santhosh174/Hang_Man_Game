@@ -1,4 +1,5 @@
 ﻿using HangMan.Data;
+using HangMan.Logic;
 
 namespace HangMan.Display
 {
@@ -11,43 +12,35 @@ namespace HangMan.Display
 			Console.WriteLine("Rule1: The game randomly selects a secret word from a predefined word list. \r\nRule2: The game displays blanks representing each letter of the secret word. \r\nRule3: The player guesses one letter at a time. \r\nRule4: If the guessed letter appears in the secret word, all matching positions are revealed. \r\nRule5: If the guessed letter is not in the secret word, the game adds one part to the hangman drawing (a strike). \r\nRule6: The player wins by revealing all letters before reaching the maximum number of strikes. \r\nRule7: The player loses if the hangman drawing is completed before the word is fully guessed. ");
 		}
 
-		internal void DisplayDrawing(int n)
+		internal static string DisplayDrawing(int n)
 		{
 			switch(n)
 			{
 				case 1:
-					Console.WriteLine(Drawing.strFirstChance);
-					break;
+					return Drawing.strFirstChance;
 				case 2:
-					Console.WriteLine(Drawing.strSecondChance);
-					break;
+					return Drawing.strSecondChance;
 				case 3:
-					Console.WriteLine(Drawing.strThirdChance);
-					break;
+					return Drawing.strThirdChance;
 				case 4:
-					Console.WriteLine(Drawing.strFourthChance);
-					break;
+					return Drawing.strFourthChance;
 				case 5:
-					Console.WriteLine(Drawing.strFifthChance);
-					break;
+					return Drawing.strFifthChance;
 				case 6:
-					Console.WriteLine(Drawing.strSixthChance);
-					break;
+					return Drawing.strSixthChance;
 				case 7:
-					Console.WriteLine(Drawing.strSeventhChance);
-					break;
+					return Drawing.strSeventhChance;
 			}
+
+			return string.Empty;
 		}
 
 		internal static string DisplayQuestion()
 		{
-			string filePath = @"../../../Data/Questions.txt";  // Update with your file path
-			string content = File.ReadAllText(filePath);
-			string[] words = content.Split(new char[] { ' ', '\t', '\n', '\r', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
-			Random random = new Random();
-			string randomWord = words[random.Next(words.Length)];
+			HangManBO hangManBO = new HangManBO();
+			string strQuesiton = hangManBO.GenerateQuestion();
 
-			return randomWord;
+			return strQuesiton;
 		}
 		internal void DisplayResult(bool bResult)
 		{
