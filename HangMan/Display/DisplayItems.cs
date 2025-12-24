@@ -42,9 +42,10 @@ namespace HangMan.Display
 
 			return strQuesiton;
 		}
+
 		internal void DisplayResult(bool bResult)
 		{
-			if(bResult) 
+			if(bResult)
 			{
 				Console.WriteLine(Message.strWonMessage);
 			}

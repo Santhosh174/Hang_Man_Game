@@ -5,44 +5,57 @@ namespace HangMan.Logic
 	internal class HangManBO
 	{
 		#region Properties
-		private int nChance { get; set; }
-		private string strQuestion { get; set; }
-		private string strMaskedQuestion { get; set; }
+		internal static bool bGameEnd { get; set; }
+		private static int nChance { get; set; }
+		private static string strQuestion { get; set; }
+		private static string strMaskedQuestion { get; set; }
 		#endregion
 
 		#region Internals
 		internal string GenerateQuestion()
 		{
-			string strFilePath = @"../../../Data/Questions.txt"; // Update with your file path
+			string strFilePath = @"../../../Data/Questions.txt";
 			string strContent = File.ReadAllText(strFilePath);
 			string[] words = strContent.Split(new[] { ' ', '\t', '\n', '\r', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
 			Random random = new Random();
-			this.strQuestion = words[random.Next(words.Length)];
-			this.strMaskedQuestion = " ";
-			foreach(char c in this.strQuestion)
+			strQuestion = words[random.Next(words.Length)];
+			strMaskedQuestion = " ";
+			foreach(char c in strQuestion)
 			{
-				this.strMaskedQuestion += "_ ";
+				strMaskedQuestion += "_ ";
 			}
 
-			return this.strMaskedQuestion;
+			return strMaskedQuestion;
 		}
 
-		internal string CheckAnswer(char cGuessedLetter)
+		internal static string CheckAnswer(char cGuessedLetter)
 		{
-			List<int> indexes = (this.strQuestion.Select((ch, index) => new { ch, index }).Where(x => x.ch == cGuessedLetter).Select(x => x.index)).ToList();
+			List<int> indexes = (strQuestion.Select((ch, index) => new { ch, index }).Where(x => char.ToLower(x.ch) == char.ToLower(cGuessedLetter)).Select(x => x.index)).ToList();
 
 			if(indexes.Count > 0)
 			{
 				foreach(int index in indexes)
 				{
-					this.strMaskedQuestion = this.strMaskedQuestion.Remove(index * 2, 1).Insert(index * 2 + 1, cGuessedLetter.ToString());
+					strMaskedQuestion = strMaskedQuestion.Remove(index * 2 + 1, 1).Insert(index * 2 + 1, cGuessedLetter.ToString());
 				}
 
-				return this.strMaskedQuestion;
+				if(!strMaskedQuestion.Contains("_"))
+				{
+					bGameEnd = true;
+					return strMaskedQuestion + "\nCongratulations! You've guessed the word: " + strQuestion;
+				}
+
+				return strMaskedQuestion;
 			}
 
-			this.nChance++;
-			return DisplayItems.DisplayDrawing(this.nChance);
+			nChance++;
+			if(nChance == 7)
+			{
+				bGameEnd = true;
+				return DisplayItems.DisplayDrawing(nChance) + "\nGame Over! The correct word was: " + strQuestion;
+			}
+
+			return DisplayItems.DisplayDrawing(nChance);
 		}
 		#endregion
 	}
