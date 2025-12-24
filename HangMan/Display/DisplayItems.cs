@@ -43,15 +43,15 @@ namespace HangMan.Display
 			return strQuesiton;
 		}
 
-		internal void DisplayResult(bool bResult)
+		internal static void DisplayResult(bool bResult)
 		{
 			if(bResult)
 			{
-				Console.WriteLine(Message.strWonMessage);
+				HangManRunner.WriteColoredOutput(Message.strWonMessage, ConsoleColor.Green);
 			}
 			else
 			{
-				Console.WriteLine(Message.strLostMessage);
+				HangManRunner.WriteColoredOutput(Message.strLostMessage, ConsoleColor.Red);
 			}
 		}
 		#endregion

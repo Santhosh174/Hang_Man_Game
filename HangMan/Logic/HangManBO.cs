@@ -5,6 +5,7 @@ namespace HangMan.Logic
 	internal class HangManBO
 	{
 		#region Properties
+		internal static bool bResult { get; set; }
 		internal static bool bGameEnd { get; set; }
 		private static int nChance { get; set; }
 		private static string strQuestion { get; set; }
@@ -20,6 +21,8 @@ namespace HangMan.Logic
 			Random random = new Random();
 			strQuestion = words[random.Next(words.Length)];
 			strMaskedQuestion = " ";
+			HangManRunner.WriteColoredOutput("\n" + 
+			              strQuestion.Length + " letter word.\n",ConsoleColor.Blue);
 			foreach(char c in strQuestion)
 			{
 				strMaskedQuestion += "_ ";
@@ -42,6 +45,7 @@ namespace HangMan.Logic
 				if(!strMaskedQuestion.Contains("_"))
 				{
 					bGameEnd = true;
+					bResult = true;
 					return strMaskedQuestion + "\nCongratulations! You've guessed the word: " + strQuestion;
 				}
 
@@ -52,10 +56,11 @@ namespace HangMan.Logic
 			if(nChance == 7)
 			{
 				bGameEnd = true;
+				bResult = false;
 				return DisplayItems.DisplayDrawing(nChance) + "\nGame Over! The correct word was: " + strQuestion;
 			}
 
-			return DisplayItems.DisplayDrawing(nChance);
+			return DisplayItems.DisplayDrawing(nChance) + "\n" + strMaskedQuestion;
 		}
 		#endregion
 	}

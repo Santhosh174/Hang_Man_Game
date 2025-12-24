@@ -4,6 +4,14 @@ using HangMan.Logic;
 
 internal class HangManRunner
 {
+	public static void WriteColoredOutput(string strText, ConsoleColor color)
+	{
+		ConsoleColor colorPrevious = Console.ForegroundColor;
+
+		Console.ForegroundColor = color;
+		Console.WriteLine(strText);
+		Console.ForegroundColor = colorPrevious;
+	}
 	#region Privates
 	private static void StartGame(string strMessage)
 	{
@@ -12,6 +20,7 @@ internal class HangManRunner
 			Console.WriteLine(DisplayItems.DisplayQuestion());
 			while(!HangManBO.bGameEnd)
 			{
+				Console.WriteLine("\n-------------------------------------------------------------------------------------------------");
 				string strGuess = Console.ReadLine();
 				string result = (strGuess.Length == 1) ? HangManBO.CheckAnswer(strGuess[0]) : "Invalid Input. Please enter a letter.";
 				Console.WriteLine(result);
@@ -21,6 +30,7 @@ internal class HangManRunner
 		{
 			Console.WriteLine("------------Game End-----------");
 		}
+		DisplayItems.DisplayResult(HangManBO.bResult);
 	}
 
 	private static void Main(string[] args)
@@ -29,7 +39,7 @@ internal class HangManRunner
 		DisplayItems displayItems = new DisplayItems();
 		displayItems.DisplayRules();
 		Console.WriteLine("-----------------------");
-		Console.WriteLine("Press Y to start the game:");
+		WriteColoredOutput("Press Y to start the game:", ConsoleColor.Yellow);
 		string strMessage = Console.ReadLine();
 		StartGame(strMessage);
 	}
